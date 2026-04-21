@@ -1,8 +1,9 @@
-package pet.discogs;
+package pet.discogs.rest;
 
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,10 +23,13 @@ public class GetService {
 	// String
 	// ---------------------------------------
 
-	
-	
 	@GetMapping("/hello")
 	public String hello(@RequestParam(defaultValue = "World") String name) {
+		return String.format("Hello %s!", name);
+	}
+
+	@RequestMapping("/hello2")
+	public String hello2(@RequestParam(defaultValue = "World") String name) {
 		return String.format("Hello %s!", name);
 	}
 
@@ -49,7 +53,7 @@ public class GetService {
 	// ---------------------------------------
 
 	public class GreetingClass {
-		
+
 		long id;
 		String content;
 
@@ -66,7 +70,6 @@ public class GetService {
 			return content;
 		}
 	}
-	
 
 	@GetMapping("/greetingc")
 	public GreetingClass greetingc(@RequestParam(defaultValue = "World") String name) {
