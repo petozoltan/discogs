@@ -1,25 +1,28 @@
 package pet.discogs.data;
 
-import static pet.discogs.data.Model.Country.USA;
-import static pet.discogs.data.Model.Gender.MALE;
-import static pet.discogs.data.Model.Genre.JAZZ;
-import static pet.discogs.data.Model.Instrument.GUITAR;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+import pet.discogs.data.Model.Country;
+import pet.discogs.data.Model.Gender;
+import pet.discogs.data.Model.Genre;
 import pet.discogs.data.Model.Group;
+import pet.discogs.data.Model.Instrument;
 import pet.discogs.data.Model.Person;
 import pet.discogs.data.Model.Recording;
+import pet.discogs.data.Model.RecordingType;
 
 public enum Database {
 
 	DB;
 
+	// --------------------------------------
+	// Persons
+	// --------------------------------------
+
 	private final Map<Integer, Person> persons = new HashMap<>();
-	private final Map<Integer, Group> groups = new HashMap<>();
-	private final Map<Integer, Recording> recordings = new HashMap<>();
 
 	public Collection<Person> getPersons() {
 		return persons.values();
@@ -29,6 +32,18 @@ public enum Database {
 		return persons.get(id);
 	}
 
+	public Person createAndAddPerson(String name, Gender gender, Country country, Instrument instrument, Genre genre) {
+		Person person = new Person(name, gender, country, instrument, genre);
+		persons.put(person.id(), person);
+		return person;
+	}
+
+	// --------------------------------------
+	// Groups
+	// --------------------------------------
+
+	private final Map<Integer, Group> groups = new HashMap<>();
+
 	public Collection<Group> getGroups() {
 		return groups.values();
 	}
@@ -36,6 +51,18 @@ public enum Database {
 	public Group getGroup(Integer id) {
 		return groups.get(id);
 	}
+
+	public Group createAndAddGroup(String name, Set<Person> members) {
+		Group group = new Group(name, members);
+		groups.put(group.id(), group);
+		return group;
+	}
+
+	// --------------------------------------
+	// Recordings
+	// --------------------------------------
+
+	private final Map<Integer, Recording> recordings = new HashMap<>();
 
 	public Collection<Recording> getRecordings() {
 		return recordings.values();
@@ -45,8 +72,19 @@ public enum Database {
 		return recordings.get(id);
 	}
 
-	private Database() {
+	public Recording createAndAddRecording(String title, Group group, Integer year, RecordingType type) {
+		Recording recording = new Recording(title, group, year, type);
+		recordings.put(recording.id(), recording);
+		return recording;
+	}
 
-		Person p1 = new Person(1, MALE, USA, GUITAR, JAZZ, "Pat Metheny");
+	// --------------------------------------
+	// Database
+	// --------------------------------------
+
+	public void printDatabase() {
+		System.out.println(persons);
+		System.out.println(groups);
+		System.out.println(recordings);
 	}
 }
