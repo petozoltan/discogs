@@ -1,11 +1,11 @@
 package pet.discogs.rest;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 public class GetService {
@@ -16,7 +16,7 @@ public class GetService {
 
 	@GetMapping("/")
 	public String index() {
-		return String.format("Hello!");
+		return "Hello!";
 	}
 
 	// ---------------------------------------
@@ -52,23 +52,9 @@ public class GetService {
 	// Class
 	// ---------------------------------------
 
-	public class GreetingClass {
+	public record GreetingClass(long id, String content) {
 
-		long id;
-		String content;
 
-		public GreetingClass(long id, String content) {
-			this.id = id;
-			this.content = content;
-		}
-
-		public long getId() {
-			return id;
-		}
-
-		public String getContent() {
-			return content;
-		}
 	}
 
 	@GetMapping("/greetingc")

@@ -1,23 +1,18 @@
 package pet.discogs.data;
 
-import static pet.discogs.data.Database.DB;
-import static pet.discogs.data.Model.Country.HUNGARY;
-import static pet.discogs.data.Model.Country.UK;
-import static pet.discogs.data.Model.Country.USA;
-import static pet.discogs.data.Model.Gender.MALE;
-import static pet.discogs.data.Model.Genre.JAZZ;
-import static pet.discogs.data.Model.Genre.ROCK;
-import static pet.discogs.data.Model.Instrument.BASS;
-import static pet.discogs.data.Model.Instrument.DRUMS;
-import static pet.discogs.data.Model.Instrument.GUITAR;
-import static pet.discogs.data.Model.Instrument.PIANO;
-import static pet.discogs.data.Model.RecordingType.LIVE;
-import static pet.discogs.data.Model.RecordingType.STUDIO;
+import pet.discogs.data.Model.Group;
+import pet.discogs.data.Model.Person;
 
 import java.util.Set;
 
-import pet.discogs.data.Model.Group;
-import pet.discogs.data.Model.Person;
+import static pet.discogs.data.Database.DB;
+import static pet.discogs.data.Model.Country.*;
+import static pet.discogs.data.Model.Gender.MALE;
+import static pet.discogs.data.Model.Genre.JAZZ;
+import static pet.discogs.data.Model.Genre.ROCK;
+import static pet.discogs.data.Model.Instrument.*;
+import static pet.discogs.data.Model.RecordingType.LIVE;
+import static pet.discogs.data.Model.RecordingType.STUDIO;
 
 public class MockData {
 

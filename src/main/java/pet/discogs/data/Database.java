@@ -1,18 +1,11 @@
 package pet.discogs.data;
 
+import pet.discogs.data.Model.*;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import pet.discogs.data.Model.Country;
-import pet.discogs.data.Model.Gender;
-import pet.discogs.data.Model.Genre;
-import pet.discogs.data.Model.Group;
-import pet.discogs.data.Model.Instrument;
-import pet.discogs.data.Model.Person;
-import pet.discogs.data.Model.Recording;
-import pet.discogs.data.Model.RecordingType;
 
 public enum Database {
 

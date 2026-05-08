@@ -1,9 +1,9 @@
 package pet.discogs.data;
 
-import static java.util.stream.Collectors.toSet;
-
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.util.stream.Collectors.toSet;
 
 public class Model {
 
@@ -47,7 +47,7 @@ public class Model {
 
 	public record Person(int id, String name, Gender gender, Country country, Instrument instrument, Genre genre) {
 
-		private static AtomicInteger lastId = new AtomicInteger();
+		private static final AtomicInteger lastId = new AtomicInteger();
 
 		public Person(String name, Gender gender, Country country, Instrument instrument, Genre genre) {
 			this(lastId.incrementAndGet(), name, gender, country, instrument, genre);
@@ -56,7 +56,7 @@ public class Model {
 
 	public record Group(int id, String name, Set<Person> members) {
 
-		private static AtomicInteger lastId = new AtomicInteger();
+		private static final AtomicInteger lastId = new AtomicInteger();
 
 		public Group(String name, Set<Person> members) {
 			this(lastId.incrementAndGet(), name, members);
@@ -73,7 +73,7 @@ public class Model {
 
 	public record Recording(int id, String title, Group group, Integer year, RecordingType type) {
 
-		private static AtomicInteger lastId = new AtomicInteger();
+		private static final AtomicInteger lastId = new AtomicInteger();
 
 		public Recording(String title, Group group, Integer year, RecordingType type) {
 			this(lastId.incrementAndGet(), title, group, year, type);
