@@ -55,6 +55,11 @@ public class Person {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(id, name, gender, country, instrument, genre);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof Person person)) {
             return false;
@@ -63,13 +68,8 @@ public class Person {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, name, gender, country, instrument, genre);
-    }
-
-    @Override
     public String toString() {
-        return "Person" + "{ id=" + id + ", name='" + name + '\'' + ", gender=" + gender + ", country=" + country + ", instrument=" + instrument + ", genre=" + genre + " }";
+        return "Person" + "{ id=" + id + ", name='" + name + "', gender=" + gender + ", country=" + country + ", instrument=" + instrument + ", genre=" + genre + " }";
     }
 }
 

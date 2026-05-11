@@ -1,20 +1,15 @@
 package pet.discogs.data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
 
-@Entity
+//@Entity
 public class Group {
 
-    @Id
-    @GeneratedValue
+    //    @Id
+//    @GeneratedValue
     private Long id;
 
     private String name;
@@ -41,6 +36,11 @@ public class Group {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(id, name, members);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof Group group)) {
             return false;
@@ -49,15 +49,10 @@ public class Group {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, name, members);
-    }
-
-    @Override
     public String toString() {
         return "Group{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + name + "'" +
                 ", members=" + members.stream().map(Person::getName).collect(joining(", ")) +
                 '}';
     }

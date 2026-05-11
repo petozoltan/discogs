@@ -1,29 +1,23 @@
 package pet.discogs.data;
 
-import jakarta.persistence.*;
-
 import java.util.Objects;
 
-@Entity
+//@Entity
 public class Recording {
 
-    @Id
-    @GeneratedValue
+    //    @Id
+//    @GeneratedValue
     private Long id;
 
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "group_id")
+    //    @ManyToOne
+//    @JoinColumn(name = "group_id")
     private Group group;
 
     private Integer year;
 
     private RecordingType type;
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
 
     public Recording() {
     }
@@ -56,6 +50,11 @@ public class Recording {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(id, title, group, year, type);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof Recording recording)) {
             return false;
@@ -64,15 +63,10 @@ public class Recording {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, title, group, year, type);
-    }
-
-    @Override
     public String toString() {
         return "Recording{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
+                ", title='" + title + "'" +
                 ", group=" + group.getName() +
                 ", year=" + year +
                 ", type=" + type +
