@@ -1,4 +1,4 @@
-package pet.discogs.data;
+package pet.discogs.data.values;
 
 public enum Genre {
     CLASSICAL,

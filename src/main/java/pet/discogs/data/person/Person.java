@@ -1,8 +1,12 @@
-package pet.discogs.data;
+package pet.discogs.data.person;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import pet.discogs.data.values.Country;
+import pet.discogs.data.values.Gender;
+import pet.discogs.data.values.Genre;
+import pet.discogs.data.values.Instrument;
 
 import java.util.Objects;
 
@@ -38,20 +42,40 @@ public class Person {
         return name;
     }
 
+    public void setName(final String name) {
+        this.name = name;
+    }
+
     public Gender getGender() {
         return gender;
+    }
+
+    public void setGender(final Gender gender) {
+        this.gender = gender;
     }
 
     public Country getCountry() {
         return country;
     }
 
+    public void setCountry(final Country country) {
+        this.country = country;
+    }
+
     public Instrument getInstrument() {
         return instrument;
     }
 
+    public void setInstrument(final Instrument instrument) {
+        this.instrument = instrument;
+    }
+
     public Genre getGenre() {
         return genre;
+    }
+
+    public void setGenre(final Genre genre) {
+        this.genre = genre;
     }
 
     @Override

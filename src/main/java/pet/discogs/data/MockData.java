@@ -6,14 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import pet.discogs.data.person.Person;
+import pet.discogs.data.person.PersonRepository;
 
 import java.util.List;
 
-import static pet.discogs.data.Country.*;
-import static pet.discogs.data.Gender.MALE;
-import static pet.discogs.data.Genre.JAZZ;
-import static pet.discogs.data.Genre.ROCK;
-import static pet.discogs.data.Instrument.*;
+import static pet.discogs.data.values.Country.*;
+import static pet.discogs.data.values.Gender.MALE;
+import static pet.discogs.data.values.Genre.JAZZ;
+import static pet.discogs.data.values.Genre.ROCK;
+import static pet.discogs.data.values.Instrument.*;
 
 @Component
 public class MockData implements ApplicationRunner {
@@ -73,7 +75,7 @@ public class MockData implements ApplicationRunner {
 
     private void printH2DB() {
 
-        List<pet.discogs.data.Person> persons = personRepository.findAll();
+        List<Person> persons = personRepository.findAll();
 //        final List<Group> groups = groupRepository.findAll();
 //        final List<Recording> recordings = recordingRepository.findAll();
 

@@ -1,4 +1,6 @@
-package pet.discogs.data;
+package pet.discogs.data.group;
+
+import pet.discogs.data.person.Person;
 
 import java.util.Objects;
 import java.util.Set;

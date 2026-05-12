@@ -1,4 +1,7 @@
-package pet.discogs.data;
+package pet.discogs.data.recording;
+
+import pet.discogs.data.group.Group;
+import pet.discogs.data.values.RecordingType;
 
 import java.util.Objects;
 
