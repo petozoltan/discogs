@@ -47,6 +47,20 @@ class PersonController {
 
         final Person person = findById(id);
 
+        person.setName(newPerson.getName());
+        person.setGender(newPerson.getGender());
+        person.setCountry(newPerson.getCountry());
+        person.setGenre(newPerson.getGenre());
+        person.setInstrument(newPerson.getInstrument());
+
+        return repository.save(person);
+    }
+
+    @PatchMapping("/persons/{id}")
+    Person updatePerson(@RequestBody Person newPerson, @PathVariable Long id) {
+
+        final Person person = findById(id);
+
         Optional.of(newPerson).map(Person::getName).ifPresent(person::setName);
         Optional.of(newPerson).map(Person::getGender).ifPresent(person::setGender);
         Optional.of(newPerson).map(Person::getCountry).ifPresent(person::setCountry);
