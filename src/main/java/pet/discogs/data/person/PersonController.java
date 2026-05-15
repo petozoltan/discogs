@@ -1,27 +1,25 @@
 package pet.discogs.data.person;
 
-import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 import pet.discogs.data.entity.EntityNotFoundException;
 
-import java.util.List;
-import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static pet.discogs.data.entity.Entity.copyAttribute;
 
 @RestController
 //@RequestMapping("/")
 class PersonController {
 
     private final PersonRepository repository;
+    private final PersonModelAssembler modelAssembler;
 
-    PersonController(PersonRepository repository) {
+    @Autowired
+    PersonController(PersonRepository repository, PersonModelAssembler modelAssembler) {
         this.repository = repository;
+        this.modelAssembler = modelAssembler;
     }
 
     // ----------------------------
@@ -30,48 +28,31 @@ class PersonController {
 
     @GetMapping("/persons")
     CollectionModel<EntityModel<Person>> all() {
-        final List<EntityModel<Person>> persons = repository.findAll().stream()
-                .map(PersonController::addLinks)
-                .collect(toList());
-        return addLinks(persons);
+        return modelAssembler.toCollectionModel(repository.findAll());
     }
 
     @GetMapping("/persons/{id}")
     EntityModel<Person> one(@PathVariable Long id) {
-        return addLinks(findById(id));
+        return modelAssembler.toModel(findById(id));
     }
 
     @PostMapping("/persons")
     EntityModel<Person> newPerson(@RequestBody Person newPerson) {
-        return addLinks(repository.save(newPerson));
+        return modelAssembler.toModel(repository.save(newPerson));
     }
 
     @PutMapping("/persons/{id}")
     EntityModel<Person> replacePerson(@RequestBody Person newPerson, @PathVariable Long id) {
-
         final Person person = findById(id);
-
-        person.setName(newPerson.getName());
-        person.setGender(newPerson.getGender());
-        person.setCountry(newPerson.getCountry());
-        person.setGenre(newPerson.getGenre());
-        person.setInstrument(newPerson.getInstrument());
-
-        return addLinks(repository.save(person));
+        copyPersonAttributes(newPerson, person, true);
+        return modelAssembler.toModel(repository.save(person));
     }
 
     @PatchMapping("/persons/{id}")
     EntityModel<Person> updatePerson(@RequestBody Person newPerson, @PathVariable Long id) {
-
         final Person person = findById(id);
-
-        Optional.of(newPerson).map(Person::getName).ifPresent(person::setName);
-        Optional.of(newPerson).map(Person::getGender).ifPresent(person::setGender);
-        Optional.of(newPerson).map(Person::getCountry).ifPresent(person::setCountry);
-        Optional.of(newPerson).map(Person::getGenre).ifPresent(person::setGenre);
-        Optional.of(newPerson).map(Person::getInstrument).ifPresent(person::setInstrument);
-
-        return addLinks(repository.save(person));
+        copyPersonAttributes(newPerson, person, false);
+        return modelAssembler.toModel(repository.save(person));
     }
 
     @DeleteMapping("/persons/{id}")
@@ -83,17 +64,12 @@ class PersonController {
     // IMPLEMENTATION
     // ----------------------------
 
-    @org.jetbrains.annotations.Contract("_ -> new")
-    private static @NonNull EntityModel<Person> addLinks(final Person person) {
-        return EntityModel.of(person,
-                linkTo(methodOn(PersonController.class).one(person.getId())).withSelfRel(),
-                linkTo(methodOn(PersonController.class).all()).withRel("persons"));
-    }
-
-    @Contract("_ -> new")
-    private static @NonNull CollectionModel<EntityModel<Person>> addLinks(final List<EntityModel<Person>> persons) {
-        return CollectionModel.of(persons,
-                linkTo(methodOn(PersonController.class).all()).withSelfRel());
+    private static void copyPersonAttributes(final Person newPerson, final Person person, boolean copyNulls) {
+        copyAttribute(newPerson, person, Person::getName, Person::setName, copyNulls);
+        copyAttribute(newPerson, person, Person::getGender, Person::setGender, copyNulls);
+        copyAttribute(newPerson, person, Person::getCountry, Person::setCountry, copyNulls);
+        copyAttribute(newPerson, person, Person::getGenre, Person::setGenre, copyNulls);
+        copyAttribute(newPerson, person, Person::getInstrument, Person::setInstrument, copyNulls);
     }
 
     private @NonNull Person findById(final Long id) {
