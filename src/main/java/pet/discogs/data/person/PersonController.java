@@ -4,6 +4,8 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pet.discogs.data.entity.EntityNotFoundException;
 
@@ -37,39 +39,43 @@ class PersonController {
     }
 
     @PostMapping("/persons")
-    EntityModel<Person> newPerson(@RequestBody Person newPerson) {
-        return modelAssembler.toModel(repository.save(newPerson));
+    ResponseEntity<EntityModel<Person>> newPerson(@RequestBody Person newPerson) {
+        return toCreatedResponse(modelAssembler.toModel(repository.save(newPerson)));
     }
 
     @PutMapping("/persons/{id}")
-    EntityModel<Person> replacePerson(@RequestBody Person newPerson, @PathVariable Long id) {
-        final Person person = findById(id);
-        copyPersonAttributes(newPerson, person, true);
-        return modelAssembler.toModel(repository.save(person));
+    ResponseEntity<EntityModel<Person>> replacePerson(@RequestBody Person newPerson, @PathVariable Long id) {
+        return toCreatedResponse(modelAssembler.toModel(repository.save(copyAttributes(newPerson, findById(id), true))));
     }
 
     @PatchMapping("/persons/{id}")
-    EntityModel<Person> updatePerson(@RequestBody Person newPerson, @PathVariable Long id) {
-        final Person person = findById(id);
-        copyPersonAttributes(newPerson, person, false);
-        return modelAssembler.toModel(repository.save(person));
+    ResponseEntity<EntityModel<Person>> updatePerson(@RequestBody Person newPerson, @PathVariable Long id) {
+        return toCreatedResponse(modelAssembler.toModel(repository.save(copyAttributes(newPerson, findById(id), false))));
     }
 
     @DeleteMapping("/persons/{id}")
-    void deletePerson(@PathVariable Long id) {
+    ResponseEntity<?> deletePerson(@PathVariable Long id) {
         repository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     // ----------------------------
     // IMPLEMENTATION
     // ----------------------------
 
-    private static void copyPersonAttributes(final Person newPerson, final Person person, boolean copyNulls) {
+    private static Person copyAttributes(final Person newPerson, final Person person, boolean copyNulls) {
         copyAttribute(newPerson, person, Person::getName, Person::setName, copyNulls);
         copyAttribute(newPerson, person, Person::getGender, Person::setGender, copyNulls);
         copyAttribute(newPerson, person, Person::getCountry, Person::setCountry, copyNulls);
         copyAttribute(newPerson, person, Person::getGenre, Person::setGenre, copyNulls);
         copyAttribute(newPerson, person, Person::getInstrument, Person::setInstrument, copyNulls);
+        return person;
+    }
+
+    private static @NonNull ResponseEntity<EntityModel<Person>> toCreatedResponse(final EntityModel<Person> personModel) {
+        return ResponseEntity
+                .created(personModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(personModel);
     }
 
     private @NonNull Person findById(final Long id) {
