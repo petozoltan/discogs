@@ -10,6 +10,7 @@ import pet.discogs.data.values.Instrument;
 
 import java.util.Objects;
 
+// TODO Set up JPA relations to Group and Recordings
 @Entity
 public class Person {
 

@@ -1,34 +1,32 @@
 package pet.discogs.data.recording;
 
-import pet.discogs.data.group.Group;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import pet.discogs.data.values.RecordingType;
 
 import java.util.Objects;
 
-//@Entity
+@Entity
 public class Recording {
 
-    //    @Id
-//    @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     private String title;
 
-    //    @ManyToOne
-//    @JoinColumn(name = "group_id")
-    private Group group;
-
-    private Integer year;
+    // TODO Create valid column name with JPA
+    private Integer yearr;
 
     private RecordingType type;
 
     public Recording() {
     }
 
-    public Recording(String title, Group group, Integer year, RecordingType type) {
+    public Recording(String title, Integer yearr, RecordingType type) {
         this.title = title;
-        this.group = group;
-        this.year = year;
+        this.yearr = yearr;
         this.type = type;
     }
 
@@ -40,21 +38,29 @@ public class Recording {
         return title;
     }
 
-    public Group getGroup() {
-        return group;
+    public void setTitle(final String title) {
+        this.title = title;
     }
 
-    public Integer getYear() {
-        return year;
+    public Integer getYearr() {
+        return yearr;
+    }
+
+    public void setYearr(final Integer yearr) {
+        this.yearr = yearr;
     }
 
     public RecordingType getType() {
         return type;
     }
 
+    public void setType(final RecordingType type) {
+        this.type = type;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, group, year, type);
+        return Objects.hash(id, title, yearr, type);
     }
 
     @Override
@@ -62,7 +68,11 @@ public class Recording {
         if (!(o instanceof Recording recording)) {
             return false;
         }
-        return Objects.equals(id, recording.id) && Objects.equals(title, recording.title) && Objects.equals(group, recording.group) && Objects.equals(year, recording.year) && type == recording.type;
+        return Objects.equals(id, recording.id)
+                && Objects.equals(title, recording.title)
+                && Objects.equals(yearr, recording.yearr)
+                && type == recording.type
+                ;
     }
 
     @Override
@@ -70,8 +80,7 @@ public class Recording {
         return "Recording{" +
                 "id=" + id +
                 ", title='" + title + "'" +
-                ", group=" + group.getName() +
-                ", year=" + year +
+                ", yearr=" + yearr +
                 ", type=" + type +
                 '}';
     }

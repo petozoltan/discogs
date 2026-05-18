@@ -1,27 +1,50 @@
 package pet.discogs.data.person;
 
-import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pet.discogs.data.entity.EntityNotFoundException;
+import pet.discogs.data.common.RestHelper;
+import pet.discogs.data.group.Group;
+import pet.discogs.data.group.GroupModelAssembler;
+import pet.discogs.data.group.GroupRepository;
+import pet.discogs.data.recording.Recording;
+import pet.discogs.data.recording.RecordingModelAssembler;
+import pet.discogs.data.recording.RecordingRepository;
 
-import static pet.discogs.data.entity.Entity.copyAttribute;
+import java.util.Set;
+
+import static pet.discogs.data.common.RestHelper.copyAttribute;
 
 @RestController
-//@RequestMapping("/")
-class PersonController {
+//@RequestMapping("/") // TODO What does it mean?
+public class PersonController {
 
-    private final PersonRepository repository;
-    private final PersonModelAssembler modelAssembler;
+    private final PersonRepository personRepository;
+    private final PersonModelAssembler personModelAssembler;
+
+    private final GroupRepository groupRepository;
+    private final GroupModelAssembler groupModelAssembler;
+
+    private final RecordingRepository recordingRepository;
+    private final RecordingModelAssembler recordingModelAssembler;
 
     @Autowired
-    PersonController(PersonRepository repository, PersonModelAssembler modelAssembler) {
-        this.repository = repository;
-        this.modelAssembler = modelAssembler;
+    PersonController(
+            PersonRepository personRepository,
+            PersonModelAssembler personModelAssembler,
+            final GroupRepository groupRepository,
+            final GroupModelAssembler groupModelAssembler,
+            final RecordingRepository recordingRepository,
+            final RecordingModelAssembler recordingModelAssembler) {
+
+        this.personRepository = personRepository;
+        this.personModelAssembler = personModelAssembler;
+        this.groupRepository = groupRepository;
+        this.groupModelAssembler = groupModelAssembler;
+        this.recordingRepository = recordingRepository;
+        this.recordingModelAssembler = recordingModelAssembler;
     }
 
     // ----------------------------
@@ -29,34 +52,64 @@ class PersonController {
     // ----------------------------
 
     @GetMapping("/persons")
-    CollectionModel<EntityModel<Person>> all() {
-        return modelAssembler.toCollectionModel(repository.findAll());
-    }
-
-    @GetMapping("/persons/{id}")
-    EntityModel<Person> one(@PathVariable Long id) {
-        return modelAssembler.toModel(findById(id));
+    CollectionModel<EntityModel<Person>> getPersons() {
+        return personModelAssembler.toCollectionModel(
+                personRepository.findAll());
     }
 
     @PostMapping("/persons")
     ResponseEntity<EntityModel<Person>> newPerson(@RequestBody Person newPerson) {
-        return toCreatedResponse(modelAssembler.toModel(repository.save(newPerson)));
+        return RestHelper.toResponseCreated(
+                personModelAssembler.toModel(
+                        personRepository.save(newPerson)));
+    }
+
+    @GetMapping("/persons/{id}")
+    EntityModel<Person> getPerson(@PathVariable Long id) {
+        return personModelAssembler.toModel(
+                personRepository.getReferenceById(id));
     }
 
     @PutMapping("/persons/{id}")
     ResponseEntity<EntityModel<Person>> replacePerson(@RequestBody Person newPerson, @PathVariable Long id) {
-        return toCreatedResponse(modelAssembler.toModel(repository.save(copyAttributes(newPerson, findById(id), true))));
+        return RestHelper.toResponseCreated(
+                personModelAssembler.toModel(
+                        personRepository.save(
+                                copyAttributes(newPerson,
+                                        personRepository.getReferenceById(id), true))));
     }
 
     @PatchMapping("/persons/{id}")
     ResponseEntity<EntityModel<Person>> updatePerson(@RequestBody Person newPerson, @PathVariable Long id) {
-        return toCreatedResponse(modelAssembler.toModel(repository.save(copyAttributes(newPerson, findById(id), false))));
+        return RestHelper.toResponseCreated(
+                personModelAssembler.toModel(
+                        personRepository.save(
+                                copyAttributes(newPerson,
+                                        personRepository.getReferenceById(id), false))));
     }
 
     @DeleteMapping("/persons/{id}")
     ResponseEntity<?> deletePerson(@PathVariable Long id) {
-        repository.deleteById(id);
+        personRepository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/persons/{id}/groups")
+    CollectionModel<EntityModel<Group>> getGroups(@PathVariable Long id) {
+        final Person person = personRepository.getReferenceById(id);
+        final Set<Group> groups = Set.of(
+                groupRepository.getReferenceById(1L));
+        return groupModelAssembler.toCollectionModel(groups);
+    }
+
+    @GetMapping("/persons/{id}/recordings")
+    CollectionModel<EntityModel<Recording>> getRecordings(@PathVariable Long id) {
+        final Person person = personRepository.getReferenceById(id);
+        final Set<Recording> recordings = Set.of(
+                recordingRepository.getReferenceById(1L),
+                recordingRepository.getReferenceById(2L),
+                recordingRepository.getReferenceById(3L));
+        return recordingModelAssembler.toCollectionModel(recordings);
     }
 
     // ----------------------------
@@ -72,14 +125,4 @@ class PersonController {
         return person;
     }
 
-    private static @NonNull ResponseEntity<EntityModel<Person>> toCreatedResponse(final EntityModel<Person> personModel) {
-        return ResponseEntity
-                .created(personModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .body(personModel);
-    }
-
-    private @NonNull Person findById(final Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Person.class.getSimpleName(), id));
-    }
 }

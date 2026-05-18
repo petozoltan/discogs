@@ -1,4 +1,6 @@
 package pet.discogs.data.group;
 
-interface GroupRepository { // extends JpaRepository<Group, Long> {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface GroupRepository extends JpaRepository<Group, Long> {
 }

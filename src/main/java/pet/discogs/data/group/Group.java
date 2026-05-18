@@ -1,28 +1,27 @@
 package pet.discogs.data.group;
 
-import pet.discogs.data.person.Person;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.util.Objects;
-import java.util.Set;
 
-import static java.util.stream.Collectors.joining;
-
-//@Entity
+@Entity
+@Table(name = "ENSEMBLE") // The default 'GROUP' cannot be the name.
 public class Group {
 
-    //    @Id
-//    @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     private String name;
-    private Set<Person> members;
 
     public Group() {
     }
 
-    public Group(String name, Set<Person> members) {
+    public Group(String name) {
         this.name = name;
-        this.members = members;
     }
 
     public Long getId() {
@@ -33,13 +32,13 @@ public class Group {
         return name;
     }
 
-    public Set<Person> getMembers() {
-        return members;
+    public void setName(final String name) {
+        this.name = name;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, members);
+        return Objects.hash(id, name);
     }
 
     @Override
@@ -47,7 +46,7 @@ public class Group {
         if (!(o instanceof Group group)) {
             return false;
         }
-        return Objects.equals(id, group.id) && Objects.equals(name, group.name) && Objects.equals(members, group.members);
+        return Objects.equals(id, group.id) && Objects.equals(name, group.name);
     }
 
     @Override
@@ -55,7 +54,6 @@ public class Group {
         return "Group{" +
                 "id=" + id +
                 ", name='" + name + "'" +
-                ", members=" + members.stream().map(Person::getName).collect(joining(", ")) +
                 '}';
     }
 }

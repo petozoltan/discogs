@@ -1,4 +1,6 @@
 package pet.discogs.data.recording;
 
-interface RecordingRepository { // extends JpaRepository<Recording, Long> {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface RecordingRepository extends JpaRepository<Recording, Long> {
 }

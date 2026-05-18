@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import pet.discogs.data.group.Group;
+import pet.discogs.data.group.GroupRepository;
 import pet.discogs.data.person.Person;
 import pet.discogs.data.person.PersonRepository;
+import pet.discogs.data.recording.Recording;
+import pet.discogs.data.recording.RecordingRepository;
 
 import java.util.List;
 
@@ -16,6 +20,8 @@ import static pet.discogs.data.values.Gender.MALE;
 import static pet.discogs.data.values.Genre.JAZZ;
 import static pet.discogs.data.values.Genre.ROCK;
 import static pet.discogs.data.values.Instrument.*;
+import static pet.discogs.data.values.RecordingType.LIVE;
+import static pet.discogs.data.values.RecordingType.STUDIO;
 
 @Component
 public class MockData implements ApplicationRunner {
@@ -23,14 +29,14 @@ public class MockData implements ApplicationRunner {
     private static final Logger LOG = LoggerFactory.getLogger(MockData.class);
 
     private final PersonRepository personRepository;
-//    private final GroupRepository groupRepository;
-//    private final RecordingRepository recordingRepository;
+    private final GroupRepository groupRepository;
+    private final RecordingRepository recordingRepository;
 
     @Autowired
-    public MockData(PersonRepository personRepository /*, final GroupRepository groupRepository, final RecordingRepository recordingRepository*/) {
+    public MockData(PersonRepository personRepository, final GroupRepository groupRepository, final RecordingRepository recordingRepository) {
         this.personRepository = personRepository;
-//        this.groupRepository = groupRepository;
-//        this.recordingRepository = recordingRepository;
+        this.groupRepository = groupRepository;
+        this.recordingRepository = recordingRepository;
     }
 
     @Override
@@ -56,37 +62,37 @@ public class MockData implements ApplicationRunner {
         Person person11 = personRepository.save(new Person("Somló Tamás", MALE, HUNGARY, BASS, ROCK));
         Person person12 = personRepository.save(new Person("Solti János", MALE, HUNGARY, DRUMS, ROCK));
 
-//        Group group01 = groupRepository.save(new Group("Pat Metheny Group", Set.of(person01, person02, person03, person04)));
-//        Group group02 = groupRepository.save(new Group("Pink Floyd", Set.of(person05, person06, person07, person08)));
-//        Group group03 = groupRepository.save(new Group("Locomotiv GT", Set.of(person09, person10, person11, person12)));
+        Group group01 = groupRepository.save(new Group("Pat Metheny Group"));
+        Group group02 = groupRepository.save(new Group("Pink Floyd"));
+        Group group03 = groupRepository.save(new Group("Locomotiv GT"));
 
-//        recordingRepository.save(new Recording("Offramp", group01, 1982, STUDIO));
-//        recordingRepository.save(new Recording("First Circle", group01, 1984, STUDIO));
-//        recordingRepository.save(new Recording("Travels", group01, 1983, LIVE));
+        recordingRepository.save(new Recording("Offramp", 1982, STUDIO));
+        recordingRepository.save(new Recording("First Circle", 1984, STUDIO));
+        recordingRepository.save(new Recording("Travels", 1983, LIVE));
 
-//        recordingRepository.save(new Recording("The Dark Side of the Moon", group02, 1973, STUDIO));
-//        recordingRepository.save(new Recording("Wish You Were Here", group02, 1975, STUDIO));
-//        recordingRepository.save(new Recording("The Wall", group02, 1979, STUDIO));
+        recordingRepository.save(new Recording("The Dark Side of the Moon", 1973, STUDIO));
+        recordingRepository.save(new Recording("Wish You Were Here", 1975, STUDIO));
+        recordingRepository.save(new Recording("The Wall", 1979, STUDIO));
 
-//        recordingRepository.save(new Recording("Mindenki", group03, 1978, STUDIO));
-//        recordingRepository.save(new Recording("Loksi", group03, 1980, STUDIO));
-//        recordingRepository.save(new Recording("Búcsúkoncert", group03, 1992, LIVE));
+        recordingRepository.save(new Recording("Mindenki", 1978, STUDIO));
+        recordingRepository.save(new Recording("Loksi", 1980, STUDIO));
+        recordingRepository.save(new Recording("Búcsúkoncert", 1992, LIVE));
     }
 
     private void printH2DB() {
 
-        List<Person> persons = personRepository.findAll();
-//        final List<Group> groups = groupRepository.findAll();
-//        final List<Recording> recordings = recordingRepository.findAll();
+        final List<Person> persons = personRepository.findAll();
+        final List<Group> groups = groupRepository.findAll();
+        final List<Recording> recordings = recordingRepository.findAll();
 
         LOG.info("------------------------");
         LOG.info("H2 Database");
         LOG.info("------------------------");
         persons.stream().map(Person::toString).forEach(LOG::info);
         LOG.info("------------------------");
-//        LOG.info(groups.toString());
-//        LOG.info("------------------------");
-//        LOG.info(recordings.toString());
-//        LOG.info("------------------------");
+        groups.stream().map(Group::toString).forEach(LOG::info);
+        LOG.info("------------------------");
+        recordings.stream().map(Recording::toString).forEach(LOG::info);
+        LOG.info("------------------------");
     }
 }
