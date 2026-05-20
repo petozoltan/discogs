@@ -10,12 +10,14 @@ import pet.discogs.data.values.Instrument;
 
 import java.util.Objects;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 // TODO Set up JPA relations to Group and Recordings
 @Entity
 public class Person {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     private String name;

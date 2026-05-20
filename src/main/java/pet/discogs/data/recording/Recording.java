@@ -7,11 +7,27 @@ import pet.discogs.data.values.RecordingType;
 
 import java.util.Objects;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity
 public class Recording {
 
+    /**
+     * <p>        The default strategy is AUTO, which is most likely SEQUENCE.
+     * </p><p>    SEQUENCE
+     * <ul><li>   DOES: Uses a sequence in the database, and allocates Ids in chunks.
+     * </li><li>  PROS: Works well with batch inserts, and does not require a round trip to the database for each Id generation.
+     * </li><li>  CONS: Requires a sequence in the database, and may not work well with some databases that do not support sequences.
+     * </li></ul>
+     * </p><p>    IDENTITY
+     * <ul><li>   DOES: Uses the database's identity column, and allocates Ids one at a time.
+     * </li><li>  PROS: Works with all databases, and does not require a sequence.
+     * </li><li>  CONS: May not work well with batch inserts, and requires a round trip to the database for each Id generation.
+     * </li></ul>
+     * </p>
+     */
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     private String title;

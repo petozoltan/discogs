@@ -7,12 +7,14 @@ import jakarta.persistence.Table;
 
 import java.util.Objects;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity
 @Table(name = "ENSEMBLE") // The default 'GROUP' cannot be the name.
 public class Group {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     private String name;
