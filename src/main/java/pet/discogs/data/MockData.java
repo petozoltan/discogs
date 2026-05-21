@@ -41,10 +41,13 @@ public class MockData implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        initializeH2Db();
+//        initializeH2Db();
         printH2DB();
     }
 
+    /**
+     * @implNote The data is pre-loaded from data.sql.
+     */
     private void initializeH2Db() {
 
         Person person01 = personRepository.save(new Person("Pat Metheny", MALE, USA, GUITAR, JAZZ));

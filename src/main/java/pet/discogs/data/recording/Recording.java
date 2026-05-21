@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import pet.discogs.data.values.RecordingType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 
 import java.util.Objects;
 
@@ -35,6 +37,8 @@ public class Recording {
     // TODO Create valid column name with JPA
     private Integer yearr;
 
+
+    @Enumerated(EnumType.STRING)
     private RecordingType type;
 
     public Recording() {

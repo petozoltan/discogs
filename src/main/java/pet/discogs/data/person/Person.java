@@ -7,6 +7,8 @@ import pet.discogs.data.values.Country;
 import pet.discogs.data.values.Gender;
 import pet.discogs.data.values.Genre;
 import pet.discogs.data.values.Instrument;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 
 import java.util.Objects;
 
@@ -21,9 +23,16 @@ public class Person {
     private Long id;
 
     private String name;
+    @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    @Enumerated(EnumType.STRING)
     private Country country;
+
+    @Enumerated(EnumType.STRING)
     private Instrument instrument;
+
+    @Enumerated(EnumType.STRING)
     private Genre genre;
 
     public Person() {
