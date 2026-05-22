@@ -35,3 +35,6 @@ build/
 
 ### Junie AI ###
 .junie/
+
+### Codemie ###
+.codemie/

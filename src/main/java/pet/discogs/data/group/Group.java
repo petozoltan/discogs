@@ -1,9 +1,7 @@
 package pet.discogs.data.group;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.hibernate.annotations.NaturalId;
 
 import java.util.Objects;
 
@@ -17,6 +15,8 @@ public class Group {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @NaturalId
+    @Column(unique = true, nullable = false, updatable = false)
     private String name;
 
     public Group() {
