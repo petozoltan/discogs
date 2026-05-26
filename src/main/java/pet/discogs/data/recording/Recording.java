@@ -1,11 +1,7 @@
 package pet.discogs.data.recording;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import pet.discogs.data.values.RecordingType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
 
 import java.util.Objects;
 
@@ -34,9 +30,10 @@ public class Recording {
 
     private String title;
 
+    // TODO Add Group and add @NaturalId for Group and Title
+
     // TODO Create valid column name with JPA
     private Integer yearr;
-
 
     @Enumerated(EnumType.STRING)
     private RecordingType type;

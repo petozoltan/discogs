@@ -1,14 +1,11 @@
 package pet.discogs.data.person;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import org.hibernate.annotations.NaturalId;
 import pet.discogs.data.values.Country;
 import pet.discogs.data.values.Gender;
 import pet.discogs.data.values.Genre;
 import pet.discogs.data.values.Instrument;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
 
 import java.util.Objects;
 
@@ -22,7 +19,10 @@ public class Person {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @NaturalId
+    @Column(unique = true, nullable = false, updatable = false)
     private String name;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
