@@ -18,7 +18,7 @@ VALUES ('Pat Metheny Group'),
        ('Pink Floyd'),
        ('Locomotiv GT');
 
-INSERT INTO RECORDING (title, yearr, type)
+INSERT INTO RECORDING (title, released, type)
 VALUES ('Offramp', 1982, 'STUDIO'),
        ('First Circle', 1984, 'STUDIO'),
        ('Travels', 1983, 'LIVE'),

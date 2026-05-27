@@ -10,30 +10,14 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 public class Recording {
 
-    /**
-     * <p>        The default strategy is AUTO, which is most likely SEQUENCE.
-     * </p><p>    SEQUENCE
-     * <ul><li>   DOES: Uses a sequence in the database, and allocates Ids in chunks.
-     * </li><li>  PROS: Works well with batch inserts, and does not require a round trip to the database for each Id generation.
-     * </li><li>  CONS: Requires a sequence in the database, and may not work well with some databases that do not support sequences.
-     * </li></ul>
-     * </p><p>    IDENTITY
-     * <ul><li>   DOES: Uses the database's identity column, and allocates Ids one at a time.
-     * </li><li>  PROS: Works with all databases, and does not require a sequence.
-     * </li><li>  CONS: May not work well with batch inserts, and requires a round trip to the database for each Id generation.
-     * </li></ul>
-     * </p>
-     */
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     private String title;
 
-    // TODO Add Group and add @NaturalId for Group and Title
-
-    // TODO Create valid column name with JPA
-    private Integer yearr;
+    @Column(name = "released")
+    private Integer year;
 
     @Enumerated(EnumType.STRING)
     private RecordingType type;
@@ -41,9 +25,9 @@ public class Recording {
     public Recording() {
     }
 
-    public Recording(String title, Integer yearr, RecordingType type) {
+    public Recording(String title, Integer year, RecordingType type) {
         this.title = title;
-        this.yearr = yearr;
+        this.year = year;
         this.type = type;
     }
 
@@ -59,12 +43,12 @@ public class Recording {
         this.title = title;
     }
 
-    public Integer getYearr() {
-        return yearr;
+    public Integer getYear() {
+        return year;
     }
 
-    public void setYearr(final Integer yearr) {
-        this.yearr = yearr;
+    public void setYear(final Integer year) {
+        this.year = year;
     }
 
     public RecordingType getType() {
@@ -77,7 +61,7 @@ public class Recording {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, yearr, type);
+        return Objects.hash(id, title, year, type);
     }
 
     @Override
@@ -87,7 +71,7 @@ public class Recording {
         }
         return Objects.equals(id, recording.id)
                 && Objects.equals(title, recording.title)
-                && Objects.equals(yearr, recording.yearr)
+                && Objects.equals(year, recording.year)
                 && type == recording.type
                 ;
     }
@@ -97,7 +81,7 @@ public class Recording {
         return "Recording{" +
                 "id=" + id +
                 ", title='" + title + "'" +
-                ", yearr=" + yearr +
+                ", year=" + year +
                 ", type=" + type +
                 '}';
     }

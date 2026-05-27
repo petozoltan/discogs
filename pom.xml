@@ -140,6 +140,15 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- AssertJ fluent methods for Junit 6 -->
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.27.7</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

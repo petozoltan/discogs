@@ -114,7 +114,7 @@ public class RecordingController {
 
     private static Recording copyAttributes(final Recording newRecording, final Recording recording, boolean copyNulls) {
         copyAttribute(newRecording, recording, Recording::getTitle, Recording::setTitle, copyNulls);
-        copyAttribute(newRecording, recording, Recording::getYearr, Recording::setYearr, copyNulls);
+        copyAttribute(newRecording, recording, Recording::getYear, Recording::setYear, copyNulls);
         copyAttribute(newRecording, recording, Recording::getType, Recording::setType, copyNulls);
         return recording;
     }

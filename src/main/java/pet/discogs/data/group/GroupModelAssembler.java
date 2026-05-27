@@ -22,7 +22,7 @@ public class GroupModelAssembler implements RepresentationModelAssembler<Group, 
                 linkTo(methodOn(GroupController.class).getGroup(group.getId())).withSelfRel(),
                 linkTo(methodOn(GroupController.class).getGroups()).withRel("groups"));
 
-        // TODO They can be conditional, like 'if hasRecordings()'.
+        // They can be conditional, like 'if hasRecordings()'.
         groupModel.add(linkTo(methodOn(GroupController.class).getPersons(group.getId())).withRel("persons"));
         groupModel.add(linkTo(methodOn(GroupController.class).getRecordings(group.getId())).withRel("recordings"));
 

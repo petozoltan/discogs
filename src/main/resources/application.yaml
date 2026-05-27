@@ -31,7 +31,9 @@ spring:
     password: pwd
     driverClassName: org.h2.Driver
 
-
+  sql:
+    init:
+      mode: never # Use 'embedded' (or remove to default) to initialize the H2 database from data.sql and schema.sql files
 
 #logging:
 #  level:

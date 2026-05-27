@@ -22,7 +22,7 @@ public class PersonModelAssembler implements RepresentationModelAssembler<Person
                 linkTo(methodOn(PersonController.class).getPerson(person.getId())).withSelfRel(),
                 linkTo(methodOn(PersonController.class).getPersons()).withRel("persons"));
 
-        // TODO They can be conditional, like 'if hasGroups()'.
+        // They can be conditional, like 'if hasGroups()'.
         personModel.add(linkTo(methodOn(PersonController.class).getGroups(person.getId())).withRel("groups"));
         personModel.add(linkTo(methodOn(PersonController.class).getRecordings(person.getId())).withRel("recordings"));
 
