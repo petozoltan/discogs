@@ -12,7 +12,7 @@ public class EntityControllerAdvice {
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     String entityNotFoundHandler(EntityNotFoundException exception) {
-        // TODO Possible to create a more readable message with regex
+        // Possible to create a more readable message with regex
         return exception.getMessage();
     }
 }

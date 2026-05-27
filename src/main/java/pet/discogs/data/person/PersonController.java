@@ -18,7 +18,6 @@ import java.util.Set;
 import static pet.discogs.data.common.RestHelper.copyAttribute;
 
 @RestController
-//@RequestMapping("/") // TODO What does it mean?
 public class PersonController {
 
     private final PersonRepository personRepository;

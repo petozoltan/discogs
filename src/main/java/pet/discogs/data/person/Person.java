@@ -11,7 +11,6 @@ import java.util.Objects;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-// TODO Set up JPA relations to Group and Recordings
 @Entity
 public class Person {
 

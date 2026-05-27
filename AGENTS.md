@@ -77,7 +77,6 @@ Apply this pattern when adding new controllers.
 - Repositories extend `JpaRepository<Entity, Long>` with no custom queries yet
 - All entities use `@Id @GeneratedValue(strategy = GenerationType.IDENTITY)`
 - `Group` entity mapped to table `ENSEMBLE` (SQL keyword workaround, line 11 in Group.java)
-- Note: `Recording.yearr` has intentional typo to avoid SQL reserved word (TODO to fix)
 
 ### 4. Value Objects as Enums
 
@@ -106,7 +105,7 @@ Extend `EntityControllerAdvice` for domain-specific exceptions.
 ### Database & Development
 
 - **H2 in-memory database** with DDL auto-creation (`application.yaml` line 10: `ddl-auto: create`)
- - H2 console enabled (path configured in `application.yaml` at lines 18-21; default URL `http://localhost:8080/h2`)
+- H2 console enabled (path configured in `application.yaml` at lines 18-21; default URL `http://localhost:8080/h2`)
 - SQL logging enabled by default in `application.yaml` (lines 11-15)
 - **DevTools enabled** for hot reload on file changes
 
@@ -160,7 +159,7 @@ Same pattern applies to `/groups` and `/recordings` endpoints.
 
 1. **No JPA relations** between entities (Persons-Groups, Persons-Recordings)—cross-entity endpoints currently hardcoded
    with IDs
-2. **Column name conflicts**: `Recording.yearr` and `Group` table name are workarounds
+2. **Column name conflicts**: `Group` table name is workaround
 3. **Entity exception messages** only return raw Hibernate messages (line 16, EntityControllerAdvice)
 4. **Conditional links** in ModelAssemblers not yet implemented (noted line 25, PersonModelAssembler)
 

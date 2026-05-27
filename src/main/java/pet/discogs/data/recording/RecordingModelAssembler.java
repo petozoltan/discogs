@@ -23,7 +23,7 @@ public class RecordingModelAssembler implements RepresentationModelAssembler<Rec
                 linkTo(methodOn(RecordingController.class).getRecording(recording.getId())).withSelfRel(),
                 linkTo(methodOn(RecordingController.class).getRecordings()).withRel("recordings"));
 
-        // TODO They can be conditional, like 'if hasPersons()'.
+        // They can be conditional, like 'if hasPersons()'.
         recordingModel.add(linkTo(methodOn(RecordingController.class).getPersons(recording.getId())).withRel("persons"));
         recordingModel.add(linkTo(methodOn(RecordingController.class).getGroup(recording.getId())).withRel("group"));
 
