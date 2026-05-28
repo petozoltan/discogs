@@ -76,7 +76,7 @@ Apply this pattern when adding new controllers.
 
 - Repositories extend `JpaRepository<Entity, Long>` with no custom queries yet
 - All entities use `@Id @GeneratedValue(strategy = GenerationType.IDENTITY)`
-- `Group` entity mapped to table `ENSEMBLE` (SQL keyword workaround, line 11 in Group.java)
+- `Group` entity mapped to table `BAND` (SQL keyword workaround, line 11 in Group.java)
 
 ### 4. Value Objects as Enums
 

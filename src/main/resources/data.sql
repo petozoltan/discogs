@@ -13,7 +13,7 @@ VALUES ('Pat Metheny', 'MALE', 'USA', 'GUITAR', 'JAZZ'),
        ('Solti János', 'MALE', 'HUNGARY', 'DRUMS', 'ROCK');
 
 -- Groups
-INSERT INTO ENSEMBLE (name)
+INSERT INTO BAND (name)
 VALUES ('Pat Metheny Group'),
        ('Pink Floyd'),
        ('Locomotiv GT');
