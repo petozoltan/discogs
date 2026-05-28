@@ -1,5 +1,6 @@
 package pet.discogs.data;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import pet.discogs.data.recording.Recording;
 import pet.discogs.data.recording.RecordingRepository;
 
 import java.util.List;
+import java.util.Set;
 
 import static pet.discogs.data.values.Country.*;
 import static pet.discogs.data.values.Gender.MALE;
@@ -40,7 +42,7 @@ public class MockData implements ApplicationRunner {
     }
 
     @Override
-    public void run(ApplicationArguments args) {
+    public void run(@NonNull ApplicationArguments args) {
         initializeH2Db(); // Comment it out to initialize database with data.sql
         printH2DB();
     }
@@ -62,17 +64,9 @@ public class MockData implements ApplicationRunner {
         Person person11 = new Person("Somló Tamás", MALE, HUNGARY, BASS, ROCK);
         Person person12 = new Person("Solti János", MALE, HUNGARY, DRUMS, ROCK);
 
-        final List<Person> persons = personRepository.saveAll(List.of(
-                person01, person02, person03, person04,
-                person05, person06, person07, person08,
-                person09, person10, person11, person12
-        ));
-
         Group group01 = new Group("Pat Metheny Group");
         Group group02 = new Group("Pink Floyd");
         Group group03 = new Group("Locomotiv GT");
-
-        final List<Group> groups = groupRepository.saveAll(List.of(group01, group02, group03));
 
         final Recording recording01 = new Recording("Offramp", 1982, STUDIO);
         final Recording recording02 = new Recording("First Circle", 1984, STUDIO);
@@ -86,11 +80,27 @@ public class MockData implements ApplicationRunner {
         final Recording recording08 = new Recording("Loksi", 1980, STUDIO);
         final Recording recording09 = new Recording("Búcsúkoncert", 1992, LIVE);
 
-        final List<Recording> recordings = recordingRepository.saveAll(List.of(
-                recording01, recording02, recording03,
-                recording04, recording05, recording06,
-                recording07, recording08, recording09
-        ));
+        addMembersToGroup(group01, person01, person02, person03, person04);
+        addMembersToGroup(group02, person05, person06, person07, person08);
+        addMembersToGroup(group03, person09, person10, person11, person12);
+
+        addRecordingsToGroup(group01, recording01, recording02, recording03);
+        addRecordingsToGroup(group02, recording04, recording05, recording06);
+        addRecordingsToGroup(group03, recording07, recording08, recording09);
+
+        groupRepository.saveAll(List.of(group01, group02, group03));
+    }
+
+    private static void addMembersToGroup(@NonNull Group group, Person... members) {
+        final Set<Person> memberSet = Set.of(members);
+        group.getMembers().addAll(memberSet);
+        memberSet.forEach(member -> member.getGroups().add(group));
+    }
+
+    private static void addRecordingsToGroup(@NonNull Group group, Recording... recordings) {
+        final Set<Recording> recordingSet = Set.of(recordings);
+        group.setRecordings(recordingSet);
+        recordingSet.forEach(recording -> recording.setGroup(group));
     }
 
     private void printH2DB() {

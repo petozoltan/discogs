@@ -33,7 +33,9 @@ spring:
 
   sql:
     init:
-      mode: never # Use 'embedded' (or remove to default) to initialize the H2 database from data.sql and schema.sql files
+      mode: never
+      # Use 'never' to initialize the H2 database Java instead of using data.sql and schema.sql files
+      # Use 'embedded' (or remove to default) to initialize the H2 database from data.sql and schema.sql files
 
 #logging:
 #  level:

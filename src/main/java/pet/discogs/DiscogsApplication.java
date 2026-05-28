@@ -2,8 +2,12 @@ package pet.discogs;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
+@EnableJpaRepositories("pet.discogs.data")
+@EntityScan("pet.discogs.data")
 public class DiscogsApplication {
 
     static void main(String[] args) {

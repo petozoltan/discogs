@@ -1,6 +1,8 @@
 package pet.discogs.data.recording;
 
 import jakarta.persistence.*;
+import pet.discogs.data.common.Printable;
+import pet.discogs.data.group.Group;
 import pet.discogs.data.values.RecordingType;
 
 import java.util.Objects;
@@ -8,7 +10,7 @@ import java.util.Objects;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-public class Recording {
+public class Recording extends Printable {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -22,6 +24,9 @@ public class Recording {
     @Enumerated(EnumType.STRING)
     private RecordingType type;
 
+    @ManyToOne(optional = false)
+    private Group group;
+
     public Recording() {
     }
 
@@ -29,6 +34,14 @@ public class Recording {
         this.title = title;
         this.year = year;
         this.type = type;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(final Group group) {
+        this.group = group;
     }
 
     public Long getId() {
@@ -61,7 +74,7 @@ public class Recording {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, year, type);
+        return Objects.hash(id, group, title, year, type);
     }
 
     @Override
@@ -70,6 +83,7 @@ public class Recording {
             return false;
         }
         return Objects.equals(id, recording.id)
+                && Objects.equals(group, recording.group)
                 && Objects.equals(title, recording.title)
                 && Objects.equals(year, recording.year)
                 && type == recording.type
@@ -78,11 +92,17 @@ public class Recording {
 
     @Override
     public String toString() {
-        return "Recording{" +
-                "id=" + id +
+        return "Recording" +
+                "{ id=" + id +
+                ", group='" + group.getName() + "'" +
                 ", title='" + title + "'" +
                 ", year=" + year +
                 ", type=" + type +
-                '}';
+                " }";
+    }
+
+    @Override
+    public String getShortName() {
+        return year + " " + title;
     }
 }

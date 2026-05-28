@@ -1,10 +1,25 @@
 # TODO
 
+## Database
+
+- [ ] Use PostgreSQL.
+
 ## Java
 
 ### Java 23
 
 - [ ] Convert javadoc comment to Markdown (with IDE action).
+
+## Spring Boot
+
+### REST
+
+- [ ] Add global error page for 404 and 500 errors.
+- [ ] Fix `hibernateLazyInitializer` in JSON response.
+- [ ] Fix endless recursion in JSON response with `@JsonIgnore` and `@JsonManagedReference`/`@JsonBackReference`.
+- [ ] Add Spring Security.
+
+## Spring Data
 
 ### JPA
 
@@ -16,12 +31,27 @@
 - [ ] Add `@Transient` attribute.
 - [ ] Add `@Temporal` attribute.
 - [x] Optimize `save` actions for database initialization in Java. (No single persisting.)
+- [ ] Add related entities with lazy loading.
+- [ ] Implement `equals()` and `hashCode() with correct IDs. (Generated or Natural or any members.)
+- [ ] Create a composite key with `@IdClass` or `@EmbeddedId` and `@Embeddable`.
+- [ ] Add `@Version` for optimistic locking.
 
 ##### Queries
+
+- [ ] Add custom query methods.
+- [ ] Solve N+1 problem with `@EntityGraph` and `JOIN FETCH`.
 
 Derived Query Methods
 
 - [ ] Add Nested attribute queries (with entity relations).
+- [ ] Add pagination.
+- [ ] Add sorting.
+- [ ] Add projections.
+- [ ] Add events.
+
+### REST
+
+- [ ] Use Spring Data REST.
 
 -----------------------------------------------------------------------------------
 
@@ -31,13 +61,13 @@ Derived Query Methods
 
 ### Entities
 
-- [ ] How to avoid concurrent modification exception when saving related entities?
-- [ ] Fix invalid colunm name with JPA annotation.
-- [ ] Should I initialize collection attributes with `new ArrayList<>()` (or `Set` or `Map`)?
+- [x] How to avoid concurrent modification exception when saving related entities?
+- [x] Fix invalid colunm name with JPA annotation.
+- [x] Should I initialize collection attributes with `new ArrayList<>()` (or `Set` or `Map`)?
 
 #### Generated IDs
 
-- [ ] How to create and related entities with SQL, when IDs are auto-generated?
+- [ ] How to create related entities with SQL, when IDs are auto-generated?
 
 #### Save
 
@@ -53,9 +83,19 @@ Derived Query Methods
 
 ## Java
 
+### Java 16
+
+- `Stream.toList()` can be used instead of `.collect(toList())`.
+    - `Stream.toList()` → Immutable, value-only, optimized
+    - `Collectors.toList()` → Mutable, identity-based, traditional
+
 ### Java 23
 
+#### Javadoc
+
 - After Java 23 or IntelliJ 2024.2 Markdown javadoc comments can be used.
+- Recommended replacement for `{@link Class#method(parameters)}` is `[Class#method(parameters)]`.
+- Traditional javadoc tags are still supported.
 
 ## JPA
 
@@ -83,6 +123,24 @@ Derived Query Methods
 - No need to call it explicitly when modifying a managed entity within a transaction.
     - Not even before a `find` method.
 
+#### One-to-Many/Many-to-One
+
+- Cross-link the entities on both sides before persisting.
+- Persist only that side of the relation which has the `cascade = CascadeType.PERSIST`.
+- Don't include both sides of the relation in the `hasCode()`, `equals()` and `toString()` methods, to avoid infinite
+  recursion.
+    - Include only the foreign key side of the relation in the `hasCode()`, `equals()` and `toString()` methods.
+- Initialize collection attributes with `new ArrayList<>()` (or `Set` or `Map`) to avoid `NullPointerException`.
+    - Use only mutable collections for collection attributes, to avoid `UnsupportedOperationException`.
+- Foreign key column names are derived from the attribute name by default, but can be customized with `@JoinColumn`.
+- `CascadeType.REMOVE` and `OneToMany.orphanRemoval` both control deletion of child entities, but they trigger in
+  different situations
+
+#### Many-to-Many
+
+- Prefer Set over List — Hibernate generates a delete all + reinsert for List on any change (the "bag" problem).
+- Don't use CascadeType.REMOVE.
+
 ### Queries
 
 #### Derived Query Methods
@@ -102,14 +160,29 @@ Find the naming convention for the possible query methods here:
 
 ## Spring Boot
 
-#### Database initialization
+### Application
+
+#### Application class
+
+- The `main(String[])}` method will be started 2 times: once by the Java Application start, once by the Spring
+  Restarter.
+- Do not put any initializations into that.
+
+#### Configuration
+
+- It is optional to create a distinct class with `@Configuration` because `@SpringBootApplication` is a meta-annotation
+  that already adds `@Configuration`.
+- It is optional to add `@EnableJpaRepositories("path")` and `@EntityScan("path"), because all packages are scanned by
+  default.
+
+### Database
+
+#### Initialization
 
 Don't:
 
 - Do not put any initializations into the `main(String[])}` method.
-- It will be started 2 times:
-    * once by the Java Application start,
-    * once by the Spring Restarter.
+- It will be started 2 times: once by the Java Application start, once by the Spring Restarter.
 
 With Java:
 
@@ -126,6 +199,15 @@ With SQL:
 - It runs after `classpath:data.sql`, which is intended for DDL commands.
 - It can be turned on/off by `spring.sql.init.mode` in `application.yaml`.
     - Default is `embedded`, which is executed in case of an in-memory database (e.g. H2).
+
+#### H2
+
+- Default access of the H2 Console of an in-memory H2 database: http://localhost:8080/h2-console /
+  `jdbc:h2:mem:testdb` / `sa` / (no password)
+- `application.yaml` settings to change them: `spring.h2.console`, `spring.datasource` and
+  `spring.jpa.database-platform`.
+    - Recommended for Hibernate: `org.hibernate.dialect.H2Dialect`
+- See [Spring Boot With H2 Database](https://www.baeldung.com/spring-boot-h2-database)
 
 -----------------------------------------------------------------------------------
 

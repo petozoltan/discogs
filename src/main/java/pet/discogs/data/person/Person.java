@@ -2,17 +2,22 @@ package pet.discogs.data.person;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
+import pet.discogs.data.common.Printable;
+import pet.discogs.data.group.Group;
 import pet.discogs.data.values.Country;
 import pet.discogs.data.values.Gender;
 import pet.discogs.data.values.Genre;
 import pet.discogs.data.values.Instrument;
 
 import java.util.Objects;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-public class Person {
+public class Person extends Printable {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -33,6 +38,9 @@ public class Person {
 
     @Enumerated(EnumType.STRING)
     private Genre genre;
+
+    @ManyToMany(mappedBy = "members", fetch = FetchType.EAGER)
+    private SortedSet<Group> groups = new TreeSet<>();
 
     public Person() {
     }
@@ -89,6 +97,10 @@ public class Person {
         this.genre = genre;
     }
 
+    public Set<Group> getGroups() {
+        return groups;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, name, gender, country, instrument, genre);
@@ -104,7 +116,20 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person" + "{ id=" + id + ", name='" + name + "', gender=" + gender + ", country=" + country + ", instrument=" + instrument + ", genre=" + genre + " }";
+        return "Person" +
+                "{ id=" + id +
+                ", name='" + name + "," +
+                ", gender=" + gender +
+                ", country=" + country +
+                ", instrument=" + instrument +
+                ", genre=" + genre +
+                ", groups=" + print(groups) /* groups.stream().map(Group::getName).toList() */ +
+                " }";
+    }
+
+    @Override
+    public String getShortName() {
+        return name;
     }
 }
 
