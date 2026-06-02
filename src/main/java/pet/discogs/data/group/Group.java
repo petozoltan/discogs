@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -68,6 +69,24 @@ public class Group extends Printable {
         return members;
     }
 
+    public void addMember(Person member) {
+        this.members.add(member);
+        member.getGroups().add(this);
+    }
+
+    public void addMembers(Person... members) {
+        Stream.of(members).forEach(this::addMember);
+    }
+
+    public void addRecording(Recording recording) {
+        this.recordings.add(recording);
+        recording.setGroup(this);
+    }
+
+    public void addRecordings(Recording... recordings) {
+        Stream.of(recordings).forEach(this::addRecording);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
@@ -85,9 +104,9 @@ public class Group extends Printable {
     public String toString() {
         return "Group" +
                 "{ id=" + id +
-                ", name='" + name + "'" +
-                ", members=" + print(members) /* members.stream().map(Person::getName).toList() */ +
-                ", recordings=" + print(recordings)/* recordings.stream().map(Recording::getTitle).toList() */ +
+                ", name=" + name +
+                ", members=" + print(members) +
+                ", recordings=" + print(recordings) +
                 " }";
     }
 

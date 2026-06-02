@@ -26,7 +26,7 @@
 #### Entities
 
 - [x] Create valid column name with JPA
-- [ ] Set up JPA relations between entities.
+- [x] Set up JPA relations between entities.
 - [ ] Add `@NaturalId` with multiple attributes.
 - [ ] Add `@Transient` attribute.
 - [ ] Add `@Temporal` attribute.
@@ -38,14 +38,15 @@
 
 ##### Queries
 
-- [ ] Add custom query methods.
+- [ ] Add and test modify query methods.
+- [ ] Add custom query methods with `@Query` and `@Modifying`.
 - [ ] Solve N+1 problem with `@EntityGraph` and `JOIN FETCH`.
 
 Derived Query Methods
 
-- [ ] Add Nested attribute queries (with entity relations).
+- [x] Add Nested attribute queries (with entity relations).
 - [ ] Add pagination.
-- [ ] Add sorting.
+- [x] Add sorting.
 - [ ] Add projections.
 - [ ] Add events.
 
@@ -68,6 +69,13 @@ Derived Query Methods
 #### Generated IDs
 
 - [ ] How to create related entities with SQL, when IDs are auto-generated?
+
+#### Queries
+
+Derived Query Methods
+
+- [ ] When is it recommeneded to use `JpaRepository` `delete` methods, or `CrudRepository` `delete()` methods or
+  `@Modifying` and `@Query` to execute a `DELETE` query?
 
 #### Save
 
@@ -153,10 +161,17 @@ Find the naming convention for the possible query methods here:
 
 - `SimpleJpaRepository` adds it as necessary.
 - Every method has a read-only transaction is by default, unless it is overridden.
-- No need to add it to the class, to inherited methods, to derived methods.
-- Add it only to custom methods that modify data.
+- Add read-write transaction to derived and custom methods that modify data.
 - Add it to the service layer.
 - Add it to integration tests.
+- In Spring Boot applications prefer `org.springframework.transaction.annotation.Transactional` over `
+  jakarta.transaction.Transactional` because it offers more options and it is more integrated into Spring Boot.
+
+`deleteBy...()`
+
+- It is not recommended to use `deleteBy...()` methods, because they execute a `SELECT` query to find the entities to
+  delete, and then execute a `DELETE` query for each entity.
+- It is recommended to use `@Modifying` and `@Query` to execute a single `DELETE` query instead.
 
 ## Spring Boot
 

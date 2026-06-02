@@ -2,8 +2,10 @@ package pet.discogs.data.common;
 
 import org.jspecify.annotations.NonNull;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 public abstract class Printable implements Comparable<Printable> {
 
@@ -14,6 +16,10 @@ public abstract class Printable implements Comparable<Printable> {
     @Override
     public int compareTo(@NonNull final Printable other) {
         return NATURAL_ORDER.compare(this, other);
+    }
+
+    public static String print(Collection<? extends Printable> printables) {
+        return print(new TreeSet<>(printables));
     }
 
     public static String print(SortedSet<? extends Printable> printables) {
