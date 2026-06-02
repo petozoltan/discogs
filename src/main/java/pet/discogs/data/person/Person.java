@@ -118,12 +118,12 @@ public class Person extends Printable {
     public String toString() {
         return "Person" +
                 "{ id=" + id +
-                ", name='" + name + "," +
+                ", name=" + name +
                 ", gender=" + gender +
                 ", country=" + country +
                 ", instrument=" + instrument +
                 ", genre=" + genre +
-                ", groups=" + print(groups) /* groups.stream().map(Group::getName).toList() */ +
+                ", groups=" + print(groups) +
                 " }";
     }
 

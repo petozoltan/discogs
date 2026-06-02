@@ -1,6 +1,7 @@
 package pet.discogs.data.person;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import pet.discogs.data.values.Country;
 import pet.discogs.data.values.Genre;
 import pet.discogs.data.values.Instrument;
 
@@ -63,4 +64,17 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     // Nested properties
     // --------------------------------------
 
+    List<Person> findByGroupsName(String groupsName);
+
+    // --------------------------------------
+    // Distinct
+    // --------------------------------------
+
+    List<Person> findDistinctByGroupsName(String groupsName);
+
+    // --------------------------------------
+    // Limits & Sorting
+    // --------------------------------------
+
+    List<Person> findFirst2ByCountryOrderByNameDesc(Country country);
 }

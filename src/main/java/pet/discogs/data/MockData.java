@@ -2,7 +2,6 @@ package pet.discogs.data;
 
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -15,8 +14,8 @@ import pet.discogs.data.recording.Recording;
 import pet.discogs.data.recording.RecordingRepository;
 
 import java.util.List;
-import java.util.Set;
 
+import static org.slf4j.LoggerFactory.getLogger;
 import static pet.discogs.data.values.Country.*;
 import static pet.discogs.data.values.Gender.MALE;
 import static pet.discogs.data.values.Genre.JAZZ;
@@ -28,7 +27,7 @@ import static pet.discogs.data.values.RecordingType.STUDIO;
 @Component
 public class MockData implements ApplicationRunner {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MockData.class);
+    private static final Logger LOG = getLogger(MockData.class);
 
     private final PersonRepository personRepository;
     private final GroupRepository groupRepository;
@@ -43,7 +42,9 @@ public class MockData implements ApplicationRunner {
 
     @Override
     public void run(@NonNull ApplicationArguments args) {
-        initializeH2Db(); // Comment it out to initialize database with data.sql
+        if (List.of(args.getSourceArgs()).contains("preloaddata")) {
+            initializeH2Db();
+        }
         printH2DB();
     }
 
@@ -80,27 +81,25 @@ public class MockData implements ApplicationRunner {
         final Recording recording08 = new Recording("Loksi", 1980, STUDIO);
         final Recording recording09 = new Recording("Búcsúkoncert", 1992, LIVE);
 
-        addMembersToGroup(group01, person01, person02, person03, person04);
-        addMembersToGroup(group02, person05, person06, person07, person08);
-        addMembersToGroup(group03, person09, person10, person11, person12);
+        group01.addMembers(person01, person02, person03, person04);
+        group02.addMembers(person05, person06, person07, person08);
+        group03.addMembers(person09, person10, person11, person12);
 
-        addRecordingsToGroup(group01, recording01, recording02, recording03);
-        addRecordingsToGroup(group02, recording04, recording05, recording06);
-        addRecordingsToGroup(group03, recording07, recording08, recording09);
+        group01.addRecordings(recording01, recording02, recording03);
+        group02.addRecordings(recording04, recording05, recording06);
+        group03.addRecordings(recording07, recording08, recording09);
 
         groupRepository.saveAll(List.of(group01, group02, group03));
-    }
 
-    private static void addMembersToGroup(@NonNull Group group, Person... members) {
-        final Set<Person> memberSet = Set.of(members);
-        group.getMembers().addAll(memberSet);
-        memberSet.forEach(member -> member.getGroups().add(group));
-    }
+        // Linking already persisted entities
 
-    private static void addRecordingsToGroup(@NonNull Group group, Recording... recordings) {
-        final Set<Recording> recordingSet = Set.of(recordings);
-        group.setRecordings(recordingSet);
-        recordingSet.forEach(recording -> recording.setGroup(group));
+        Person person13 = new Person("Laux József", MALE, HUNGARY, DRUMS, ROCK);
+        final Person person13Saved = personRepository.save(person13);
+
+        groupRepository.findByName("Locomotiv GT").ifPresent(group -> {
+            group.addMembers(person13Saved);
+            groupRepository.save(group);
+        });
     }
 
     private void printH2DB() {

@@ -94,8 +94,8 @@ public class Recording extends Printable {
     public String toString() {
         return "Recording" +
                 "{ id=" + id +
-                ", group='" + group.getName() + "'" +
-                ", title='" + title + "'" +
+                ", group=" + group.getName() +
+                ", title=" + title +
                 ", year=" + year +
                 ", type=" + type +
                 " }";
