@@ -37,6 +37,9 @@ spring:
       # Use 'never' to initialize the H2 database Java instead of using data.sql and schema.sql files
       # Use 'embedded' (or remove to default) to initialize the H2 database from data.sql and schema.sql files
 
+server:
+  port: 8085
+
 #logging:
 #  level:
 #    org:
