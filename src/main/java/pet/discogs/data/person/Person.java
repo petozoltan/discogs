@@ -1,5 +1,6 @@
 package pet.discogs.data.person;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 import pet.discogs.data.common.Printable;
@@ -39,6 +40,7 @@ public class Person extends Printable {
     @Enumerated(EnumType.STRING)
     private Genre genre;
 
+    @JsonBackReference("group-member")
     @ManyToMany(mappedBy = "members", fetch = FetchType.EAGER)
     private SortedSet<Group> groups = new TreeSet<>();
 

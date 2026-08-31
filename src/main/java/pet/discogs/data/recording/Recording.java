@@ -1,5 +1,6 @@
 package pet.discogs.data.recording;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import pet.discogs.data.common.Printable;
 import pet.discogs.data.group.Group;
@@ -24,6 +25,7 @@ public class Recording extends Printable {
     @Enumerated(EnumType.STRING)
     private RecordingType type;
 
+    @JsonBackReference("group-recording")
     @ManyToOne(optional = false)
     private Group group;
 

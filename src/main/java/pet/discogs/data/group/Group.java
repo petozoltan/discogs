@@ -1,5 +1,6 @@
 package pet.discogs.data.group;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 import pet.discogs.data.common.Printable;
@@ -26,9 +27,11 @@ public class Group extends Printable {
     @Column(unique = true, nullable = false, updatable = false)
     private String name;
 
+    @JsonManagedReference("group-recording")
     @OneToMany(mappedBy = "group", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private SortedSet<Recording> recordings = new TreeSet<>();
 
+    @JsonManagedReference("group-member")
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "GROUP_MEMBER",
