@@ -16,7 +16,7 @@
 
 - [ ] Add global error page for 404 and 500 errors.
 - [ ] Fix `hibernateLazyInitializer` in JSON response.
-- [ ] Fix endless recursion in JSON response with `@JsonIgnore` and `@JsonManagedReference`/`@JsonBackReference`.
+- [x] Fix endless recursion in JSON response with `@JsonIgnore` and `@JsonManagedReference`/`@JsonBackReference`.
 - [ ] Add Spring Security.
 
 ## Spring Data
@@ -32,7 +32,7 @@
 - [ ] Add `@Temporal` attribute.
 - [x] Optimize `save` actions for database initialization in Java. (No single persisting.)
 - [ ] Add related entities with lazy loading.
-- [ ] Implement `equals()` and `hashCode() with correct IDs. (Generated or Natural or any members.)
+- [ ] Implement `equals()` and `hashCode()` with correct IDs. (Generated or Natural or any members.)
 - [ ] Create a composite key with `@IdClass` or `@EmbeddedId` and `@Embeddable`.
 - [ ] Add `@Version` for optimistic locking.
 
@@ -187,7 +187,7 @@ Find the naming convention for the possible query methods here:
 
 - It is optional to create a distinct class with `@Configuration` because `@SpringBootApplication` is a meta-annotation
   that already adds `@Configuration`.
-- It is optional to add `@EnableJpaRepositories("path")` and `@EntityScan("path"), because all packages are scanned by
+- It is optional to add `@EnableJpaRepositories("path")` and `@EntityScan("path")`, because all packages are scanned by
   default.
 
 ### Database
